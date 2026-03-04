@@ -1,0 +1,27 @@
+2026-01-15 08:46:18 - root - DEBUG - Debug-Information
+2026-01-15 08:46:18 - root - INFO - Allgemeine Info
+2026-01-15 08:46:18 - root - WARNING - Warnung
+2026-01-15 08:46:18 - root - ERROR - Ein Fehler ist aufgetreten
+2026-01-15 08:46:18 - root - CRITICAL - Kritischer Fehler
+2026-01-15 08:46:22 - root - DEBUG - Debug-Information
+2026-01-15 08:46:22 - root - INFO - Allgemeine Info
+2026-01-15 08:46:22 - root - WARNING - Warnung
+2026-01-15 08:46:22 - root - ERROR - Ein Fehler ist aufgetreten
+2026-01-15 08:46:22 - root - CRITICAL - Kritischer Fehler
+2026-01-15 08:46:41 - root - DEBUG - Debug-Information
+2026-01-15 08:46:41 - root - INFO - Allgemeine Info
+2026-01-15 08:46:41 - root - WARNING - Warnung
+2026-01-15 08:46:41 - root - ERROR - Ein Fehler ist aufgetreten
+2026-01-15 08:46:41 - root - CRITICAL - Kritischer Fehler
+2026-01-15 08:50:49 - root - DEBUG - Debug-Information
+2026-01-15 08:50:49 - root - INFO - Allgemeine Info
+2026-01-15 08:50:49 - root - WARNING - Warnung
+2026-01-15 08:50:49 - root - ERROR - Ein Fehler ist aufgetreten
+2026-01-15 08:50:49 - root - CRITICAL - Kritischer Fehler
+2026-01-15 09:05:19 - root - DEBUG - Debug-Information
+2026-01-15 09:05:19 - root - INFO - Allgemeine Info
+2026-01-15 09:05:19 - root - WARNING - Warnung
+2026-01-15 09:05:19 - root - ERROR - Ein Fehler ist aufgetreten
+2026-01-15 09:05:19 - root - CRITICAL - Kritischer Fehler
+2026-01-15 09:36:32 - __name__ - INFO - Daten erfolgreich von https://httpbin.org/get abgerufen
+2026-01-15 09:36:32 - __name__ - DEBUG - Empfangende Daten: {"args": {}, "headers": {"Accept": "*/*", "Accept-Encoding": "gzip, deflate", "Host": "httpbin.org", "User-Agent": "python-requests/2.32.5", "X-Amzn-Trace-Id": "Root=1-6968a710-089dcf730dd7928d29dce2c9"}, "origin": "37.4.248.131", "url": "https://httpbin.org/get"}

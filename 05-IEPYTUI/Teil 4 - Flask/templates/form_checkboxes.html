@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+  <form action="/form_checkboxes" method="POST">
+      <h2><strong> Fähigkeiten </strong></h2>
+      <p>
+      <input type="checkbox" name="skills" value="Python" id="Python" placeholder="Tu lenguaje de programacion">
+      <label for="Python"> Python (.py) </label>
+      </p>
+      <p>
+      <input type="checkbox" name="skills" value="Javascript" id="Javascript" placeholder="Tu lenguaje de programacion">
+      <label for="Javascript"> JavaScript (.js) </label>
+      </p>
+      <p>
+      <input type="checkbox" name="skills" value="C++" id="C++" placeholder="Tu lenguaje de programacion">
+      <label for="C++"> C++ </label>
+      </p>
+      <input type="submit" value="Abschicken">
+
+      {% if message %}
+        <hr>
+        <p><strong>{{ message }}</strong></p>
+      {% endif %}
+
+  </form>
+</body>
+</html>

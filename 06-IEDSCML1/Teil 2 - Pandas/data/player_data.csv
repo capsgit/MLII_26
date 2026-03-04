@@ -1,0 +1,9 @@
+id,playername,points,power,temp
+101,Alice,20.0,34
+102,Bob,,80.0,sa
+103,Charlie,15.0,75.0,24
+104,David,22.0,234
+105,Eve,,95.0,32
+106,Frank,18.0,85.0,a234
+107,Grace,25.0,90.0,23
+108,Hank,30.0,88.0,4as

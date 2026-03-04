@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Result!!!!!!!</title>
+    <style>
+      body { font-family: Arial, sans-serif; margin: 40px; }
+    </style>
+</head>
+<body>
+<div class="container" style="background-color: darkseagreen; justify-self:center; padding: 0.5rem; color: black; width: 25rem">
+  <h3> Resultados: </h3>
+  <p><strong> Name: </strong> {{ name }} </p>
+  <p><strong> Age: </strong> {{age}} </p>
+  <p><strong> Gender: </strong> {{ gender }} </p>
+  <p><strong> Skills: </strong> {{ skills | join(", ") }} </p>
+  <p><strong> Data updated: </strong> {{filename}} </p>
+</div>
+
+</body>
+</html>

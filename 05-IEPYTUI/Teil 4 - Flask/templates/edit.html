@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dateizeile bearbeiten</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        form { max-width: 400px; }
+        textarea { width: 100%; height: 100px; }
+        button { padding: 10px 20px; }
+    </style>
+</head>
+<body>
+    <h1>Zeile aus Datei bearbeiten</h1>
+
+
+    <form method="POST" action="/">
+        <textarea name="inhalt">{{ inhalt }}</textarea>
+        <br>
+        <button type="submit">Save</button>
+    </form>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <ul style="color: forestgreen;">
+        {% for message in messages %}
+            <li>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    {% endwith %}
+</body>
+</html>

@@ -1,0 +1,6 @@
+perro
+gato
+oso
+lobo
+camaleon
+jirafa

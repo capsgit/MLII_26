@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Form</title>
+</head>
+<body>
+    <h1>Formular mit Dropdown und Radio-Buttons</h1>
+    <form action="/form_options" method="post">
+        <!-- Dropdown Menü-->
+        <label for="dropdown">Bitte wählen Sie eine Option:</label>
+        <select name="dropdown" id="dropdown" required>
+            <option value="" disabled selected>Bitte auswählen</option>
+            <option value="option1">Option 1</option>
+            <option value="option2">Option 2</option>
+            <option value="option3">Option 3</option>
+        </select><br><br>
+
+        <!--Radiobuttons -->
+        <label for="radio">Bitte wählen Sie eine Option:</label>
+        <br>
+
+        <input type="radio" id="radio1" name="radio" value="option1" required>
+        <label for="radio1">Kategorie 1</label><br>
+
+        <input type="radio" id="radio2" name="radio" value="option2">
+        <label for="radio2">Kategorie 2</label><br>
+
+        <input type="radio" id="radio3" name="radio" value="option3">
+        <label for="radio3">Kategorie 3</label><br>
+
+        <br>
+        <button type="submit">Absenden</button>
+    </form>
+
+    {% if selected_dropdown and selected_radio %}
+    <p>Sie haben folgende Auswahl getroffen:</p>
+    <ul>
+        <li>Dropdown: {{ selected_dropdown }}</li>
+        <li>Radio: {{ selected_radio }}</li>
+    </ul>
+    {% endif %}
+</body>
+</html>

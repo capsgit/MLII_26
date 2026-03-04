@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block title %}Guest Book{% endblock %}
+
+{% block content %}
+  <header class="header">
+    <h1>Bienvenido a nuestro Guest Book</h1>
+    <p>Por favor suministre solo datos verídicos</p>
+  </header>
+
+   <form class="card form" action="{{ url_for('guest_book') }}" method="POST">
+    <div class="field">
+      <label class="title" for="name">Nombre</label>
+      <input type="text" name="name" id="name" required>
+    </div>
+
+    <div class="field">
+      <label class="title" for="surename">Apellido</label>
+      <input type="text" name="surename" id="surename" required>
+    </div>
+
+    <div class="gender">
+      <label class="title">Genero</label>
+      <br>
+      <div>
+        <label for="male">Hombre</label>
+        <input type="radio" id="male" name="gender" value="male"><br>
+        <label for="female">Mujer</label>
+        <input type="radio" id="female" name="gender" value="female"><br>
+        <label for="neutral">Otro</label>
+        <input type="radio" id="neutral" name="gender" value="neutral">
+      </div>
+    </div>
+    <div class="field">
+      <label class="title" for="email">E-mail</label>
+      <input type="email" name="email" id="email" required>
+    </div>
+
+    <div class="grid2">
+      <div class="field">
+        <label class="title" for="prefix">Prefijo</label>
+        <input type="text" name="prefix" id="prefix" placeholder="+49" required>
+      </div>
+
+      <div class="field">
+        <label class="title" for="phone_number">Número</label>
+        <input type="text" name="number" id="phone_number" required>
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="title" for="date">Fecha</label>
+      <input type="date" name="date" id="date" required>
+    </div>
+
+    <div class="wishes-group">
+      <label class="title">Deseo recibir:</label>
+       <div class="checkboxes">
+        <label><input type="checkbox" checked name="wishes" value="Newsletter"> Newsletter</label>
+        <label><input type="checkbox" checked name="wishes" value="Sales"> Sales</label>
+        <label><input type="checkbox" checked name="wishes" value="Abo"> Abo</label>
+       </div>
+    </div>
+    <hr>
+    <div class="field">
+      <label class="title" for="message">Mensaje</label>
+      <textarea name="message" id="message" cols="30" rows="10" required></textarea>
+    </div>
+
+    <button class="btn" type="submit">Absenden</button>
+  </form>
+  <br>
+  <hr>
+    <a href="{{ url_for('home') }}"> Go back to Home</a>
+  <hr>
+{% endblock %}

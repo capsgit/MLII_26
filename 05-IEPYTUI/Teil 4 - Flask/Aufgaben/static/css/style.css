@@ -1,0 +1,152 @@
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  background: #f6f7fb;
+  color: #111;
+}
+
+.container {
+  max-width: 720px;
+  margin: 48px auto;
+  padding: 0 16px;
+  padding: 1rem;
+}
+
+.header h1 {
+  margin: 0 0 8px 0;
+  font-size: 32px;
+}
+
+.header p {
+  margin: 0 0 24px 0;
+  color: #444;
+}
+
+.card {
+  background: #fff;
+  border: 1px solid #e6e8ef;
+  border-radius: 14px;
+  padding: 18px;
+  box-shadow: 0 8px 24px rgba(0,0,0,.06);
+}
+
+.gender{
+  display: flex;
+  justify-content: space-between;
+  align-content: center;
+  > div {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+  }
+}
+
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.title{
+  font-weight: bolder;
+}
+
+.wishes-group {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.guest_book_link{
+  background-color: seagreen;
+  color: white;
+  float: right;
+  border: black;
+  border-radius: 10px;
+  height: 30px;
+  > a{
+    color: white;
+    text-decoration: none;
+  }
+}
+
+.checkboxes {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+}
+
+input[type="checkbox"] {
+  transform: translateY(1px);
+}
+
+.checkboxes label {
+  display: flex;
+  align-items: center;      /* Alinea el input y el texto */
+  gap: 6px;
+  cursor: pointer;
+}
+
+label {
+  font-size: 14px;
+  color: #333;
+}
+
+input {
+  height: 40px;
+  padding: 8px 10px;
+  border: 1px solid #d6d9e3;
+  border-radius: 10px;
+  outline: none;
+}
+
+input:focus {
+  border-color: #7a8cff;
+  box-shadow: 0 0 0 3px rgba(122,140,255,.18);
+}
+
+.grid2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.btn {
+  height: 42px;
+  border: 0;
+  border-radius: 12px;
+  background: #111;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  width: 100%;
+}
+
+.btn:hover { opacity: .92; }
+
+.form {
+  background-color: seagreen;
+}
+
+footer{
+  display: flex;
+  justify-content: center;
+}
+
+@media (max-width: 600px) {
+  .container {
+    margin: 20px auto;
+  }
+
+  .header h1 {
+    font-size: 24px;
+  }
+
+  .grid2 {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block title %} HOME {% endblock %}
+
+{% block content %}
+<h1>Bienvenidos!!!!!!</h1>
+<p>Welcome to the home page!</p>
+<p>Orale!!!!</p>
+<hr>
+<button class="guest_book_link"><a href="{{ url_for('guest_book') }}"> <strong> -----> Ir al Guest Book <----- </strong></a></button>
+{% endblock %}

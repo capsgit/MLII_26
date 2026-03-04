@@ -1,0 +1,14 @@
+{
+  "input_path": "data/data.csv",
+  "output_path": "data/cleaned_data.csv",
+  "log_path": "logs/cleaning.log",
+
+  "steps": [
+    {"name": "drop_empty_rows"},
+    {"name": "remove_repeated_header_rows", "column": "Order ID", "header_value": "Order ID"},
+    {"name": "cast_numeric", "columns": ["Quantity Ordered", "Price Each"]},
+    {"name": "cast_datetime", "column": "Order Date"},
+    {"name": "drop_na_after_cast"},
+    {"name": "drop_duplicates"}
+  ]
+}
