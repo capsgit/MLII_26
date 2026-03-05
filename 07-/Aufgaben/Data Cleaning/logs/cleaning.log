@@ -53,3 +53,14 @@
 2026-03-04 14:24:37,822 | INFO | [6/6] drop_duplicates: 185950 -> 185686 (removed 264)
 2026-03-04 14:24:38,283 | INFO | Saved: C:\Users\Administrator\Desktop\KursMaterial\07-\Aufgaben\Data Cleaning\data\cleaned_data.csv
 2026-03-04 14:24:38,283 | INFO | Rows out: 185686
+2026-03-05 13:17:28,605 | INFO | Reading: C:\Users\Administrator\Desktop\KursMaterial\07-\Aufgaben\Data Cleaning\data\data.csv
+2026-03-05 13:17:28,830 | INFO | Columns: ['Order ID', 'Product', 'Quantity Ordered', 'Price Each', 'Order Date', 'Purchase Address']
+2026-03-05 13:17:28,830 | INFO | Rows in: 186850
+2026-03-05 13:17:28,868 | INFO | [1/6] drop_empty_rows: 186850 -> 186305 (removed 545)
+2026-03-05 13:17:28,886 | INFO | [2/6] remove_repeated_header_rows: 186305 -> 185950 (removed 355)
+2026-03-05 13:17:28,972 | INFO | [3/6] cast_numeric: 185950 -> 185950 (removed 0)
+2026-03-05 13:17:29,257 | INFO | [4/6] cast_datetime: 185950 -> 185950 (removed 0)
+2026-03-05 13:17:29,294 | INFO | [5/6] drop_na_after_cast: 185950 -> 185950 (removed 0)
+2026-03-05 13:17:29,374 | INFO | [6/6] drop_duplicates: 185950 -> 185686 (removed 264)
+2026-03-05 13:17:29,836 | INFO | Saved: C:\Users\Administrator\Desktop\KursMaterial\07-\Aufgaben\Data Cleaning\data\cleaned_data.csv
+2026-03-05 13:17:29,836 | INFO | Rows out: 185686

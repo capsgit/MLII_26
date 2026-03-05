@@ -39,6 +39,7 @@ from __future__ import annotations
 
 import json
 import logging
+import logging.config
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -81,7 +82,7 @@ class DataCleaner:
         self.config = self._load_config(self.config_path)
 
         # Construir logger: escribe a archivo y también a consola
-        self.logger = self._build_logger(self.config.get("log_path", "logs/cleaning.log"))
+        self.logger = self._build_logger()
 
     def _load_config(self, config_path: str) -> dict:
         """
@@ -99,45 +100,17 @@ class DataCleaner:
         with open(cfg_path, "r", encoding="utf-8") as f:
             return json.load(f)
 
-    def _build_logger(self, log_path: str) -> logging.Logger:
-        """
-        Construye un logger con:
-          - FileHandler: logs/cleaning.log
-          - StreamHandler: consola
+    def _build_logger(self):
+        log_cfg = self.config["logging"]
 
-        Pseudocódigo:
-            logger = getLogger("data_cleaner")
-            si ya tiene handlers -> no duplicar
-            crear carpeta logs/
-            crear formato
-            conectar handlers
-        """
-        logger = logging.getLogger("data_cleaner")
-        logger.setLevel(logging.INFO)
+        # convert relative Log-path to absolute
+        if "file" in log_cfg["handlers"]:
+            file_handler = log_cfg["handlers"]["file"]
+            file_handler["filename"] = str(self.project_root / file_handler["filename"])
 
-        # Si corres esto varias veces dentro del mismo intérprete (ej. notebook),
-        # evita agregar handlers repetidos (si no, verías logs duplicados).
-        if logger.handlers:
-            return logger
+        logging.config.dictConfig(log_cfg)
 
-        log_file = (self.project_root / log_path).resolve()
-        log_file.parent.mkdir(parents=True, exist_ok=True)
-
-        log_format = logging.Formatter("%(asctime)s | %(levelname)s | %(message)s")
-
-        # Handler A: archivo - fh ------------------------------------
-        fh = logging.FileHandler(log_file, encoding="utf-8")
-        fh.setFormatter(log_format)
-        fh.setLevel(logging.INFO)
-
-        # Handler B: consola - sh ------------------------------------
-        sh = logging.StreamHandler()
-        sh.setFormatter(log_format)
-        sh.setLevel(logging.INFO)
-
-        logger.addHandler(fh)
-        logger.addHandler(sh)
-        return logger
+        return logging.getLogger("data_cleaner")
 
     def clean_data(self) -> pd.DataFrame:
         """

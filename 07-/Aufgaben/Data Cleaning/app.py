@@ -81,10 +81,10 @@ def main() -> None:
     df_clean = cleaner.clean_data()
 
     print("\n=== CLEANING DONE ===")
-    print(df_clean.head())
+    print(df_clean.head().to_string(index=False))
 
     # sanity checks
-    # quick_eda(df_clean)
+    quick_eda(df_clean)
 
 if __name__ == "__main__":
     main()
