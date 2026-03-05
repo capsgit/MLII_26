@@ -1,3 +1,5 @@
+from pathlib import Path
+
 user = {
     "f_name": "Thomas",
     "l_name": "müller",
@@ -15,6 +17,7 @@ print(user["kids"][0]["pet"][1])
 print(user["kids"][1]["pet"][-1])
 print(user["kids"][-2]["pet"][-1])
 print(user["kids"][-1]["pet"][-1])
+
 
 root = Path("C:/proyecto")
 print(root / "data" / "data.csv")
