@@ -2,7 +2,7 @@ import json
 import logging
 import os
 from dataclasses import dataclass
-from datetime import datetime, timezone, timedelta
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 
@@ -29,12 +29,15 @@ class Weather:
         self.config = self._load_config(self.config_path)
         self.logger = self._setup_logging(self.config)
 
-        env_path = Path(__file__).parent.parent / ".env"
+        env_path = self.project_root / ".env"
         load_dotenv(env_path)
 
         self.api_key = os.getenv("API_KEY_OWM")
         if not self.api_key:
             raise RuntimeError("Missing API_KEY_OWM in .env")
+
+        self.logger.info("Weather client initialized.")
+        self.logger.info("Logger test message")
 
     def _load_config(self, config_path: str) -> dict:
         """
@@ -48,22 +51,38 @@ class Weather:
         with open(cfg_path, "r", encoding="utf-8") as f:
             return json.load(f)
 
-    @staticmethod
-    def _setup_logging(cfg: dict[str, Any]) -> logging.Logger:
+    def _setup_logging(self, cfg: dict[str, Any]) -> logging.Logger:
         """
-        Configura logging en base a config.json.
+        Configure logging based on config.json.
         """
         log_cfg = cfg.get("logging", {})
-        level = log_cfg.get("level", "INFO")
-        fmt = log_cfg.get("format", "%(levelname)s: %(message)s")
+        log_file = log_cfg.get("file", "/logs/weather.log")
+        level_name = log_cfg.get("level", "INFO")
 
-        logging.basicConfig(level=level, format=fmt)
-        return logging.getLogger("weather")
+        log_path = (self.project_root / log_file).resolve()
+        log_path.parent.mkdir(parents=True, exist_ok=True)
+
+        fmt = log_cfg.get(
+            "format", "%(asctime)s | %(levelname)s | %(name)s | %(message)s"
+        )
+
+        logger = logging.getLogger("weather")
+        logger.setLevel(getattr(logging, level_name))
+        logger.handlers.clear()
+
+        formatter = logging.Formatter(fmt)
+
+        file_handler = logging.FileHandler(log_path, encoding="utf-8")
+        file_handler.setFormatter(formatter)
+
+        logger.addHandler(file_handler)
+
+        return logger
 
     def fetch_weather(self, city_name: str, lang: str) -> tuple[float, str, str, str]:
         """
-        Busca el clima actual de una ciudad y devuelve:
-        temperatura, descripción, sunrise, sunset
+        Search weather in X cty and return ->
+        temperature, descripción, sunrise, sunset
         """
 
         api_cfg = self.config.get("api", {})
@@ -74,10 +93,13 @@ class Weather:
         params = {
             "q": city_name,
             "appid": self.api_key,
-            "units": "metric",
+            "units": units,
             "lang": lang,
         }
 
+        self.logger.info("Fetching weather for city=%s lang=%s", city_name, lang)
+
+        # request
         try:
             response = requests.get(url, params=params, timeout=timeout)
             response.raise_for_status()
@@ -87,10 +109,18 @@ class Weather:
             self.logger.error("Timeout requesting city=%s lang=%s", city_name, lang)
             raise
         except requests.exceptions.HTTPError:
-            self.logger.error("HTTP %s for city=%s lang=%s. Body: %s", response.status_code, city_name, lang, response.text)
+            self.logger.error(
+                "HTTP %s for city=%s lang=%s. Body: %s",
+                response.status_code,
+                city_name,
+                lang,
+                response.text,
+            )
             raise
         except requests.exceptions.RequestException as e:
-            self.logger.exception("RequestException for city=%s lang=%s: %s", city_name, lang, e)
+            self.logger.exception(
+                "RequestException for city=%s lang=%s: %s", city_name, lang, e
+            )
             raise
 
         else:
@@ -105,7 +135,8 @@ class Weather:
             sunrise = datetime.fromtimestamp(sunrise_ts, tz).strftime("%H:%M")
             sunset = datetime.fromtimestamp(sunset_ts, tz).strftime("%H:%M")
 
-            return temperature, description, sunrise, sunset
+            self.logger.info(
+                "Weather data fetched successfully for city=%s lang=%s", city_name, lang
+            )
 
-        finally:
-            print("Done")
+            return temperature, description, sunrise, sunset
