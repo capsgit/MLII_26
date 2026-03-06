@@ -1,0 +1,13 @@
+{
+  "api": {
+    "base_url": "https://api.openweathermap.org/data/2.5/weather",
+    "timeout_seconds": 10,
+    "units": "metric",
+    "languages": ["de", "en"]
+  },
+  "cities": ["Berlin", "Aachen", "Stuttgart"],
+  "logging": {
+    "level": "INFO",
+    "format": "%(asctime)s | %(levelname)s | %(name)s | %(message)s"
+  }
+}
