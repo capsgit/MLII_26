@@ -20,9 +20,9 @@ class PredictionRepository:
             cursor.execute("""
                 CREATE TABLE IF NOT EXISTS predictions (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    Area INTEGER NOT NULL,
-                    Predicted_price REAL NOT NULL,
-                    Created_at TEXT NOT NULL
+                    area INTEGER NOT NULL,
+                    predicted_price REAL NOT NULL,
+                    created_at TEXT NOT NULL
                 )
             """)
             conn.commit()  # create table if doesn´t exist
@@ -34,7 +34,7 @@ class PredictionRepository:
             cursor = conn.cursor()
             cursor.execute(
                 """
-                INSERT INTO predictions (Area, Predicted_price, Created_at)
+                INSERT INTO predictions (area, predicted_price, created_at)
                 VALUES (?, ?, ?)
             """,
                 (area, predicted_price, timestamp),
@@ -45,7 +45,7 @@ class PredictionRepository:
         with self._connect() as conn:
             cursor = conn.cursor()
             cursor.execute("""
-                SELECT id, Area, Predicted_price, Created_at
+                SELECT id, area, predicted_price, created_at
                 FROM predictions
                 ORDER BY id DESC
             """)

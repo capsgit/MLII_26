@@ -13,7 +13,7 @@ from fastapi import FastAPI, HTTPException
 app = FastAPI(
     title="PredictionPrice -> Web-service",
     version="0.1.0",
-    description="Predicts the Rentprice for an input area and save both in DB",
+    description="Predicts the Rent-price for an input area and save both in DB",
 )
 
 model_service = ModelService(MODEL_PATH)  # load model (one time)
