@@ -1,0 +1,25 @@
+{
+  "api": {
+    "base_url": "https://aerodatabox.p.rapidapi.com/flights/airports",
+    "timeout_seconds": 1200,
+    "airports": ["BOG", "BER"],
+    "airports_stop": [
+      "BER",
+      "STR",
+      "CDG"
+    ],
+    "direction": "Arrival",
+    "range_hours": 2,
+    "withLeg": true,
+    "withCancelled": false,
+    "withCodeshared": true,
+    "withCargo": false,
+    "withPrivate": false,
+    "withLocation": false
+  },
+  "logging": {
+    "level": "INFO",
+    "file": "logs/airport_fligths.log",
+    "format": "%(asctime)s | %(levelname)s | %(name)s | %(message)s"
+  }
+}
