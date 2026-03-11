@@ -43,5 +43,12 @@
       <jdbc-url>jdbc:sqlite:C:\Users\Administrator\Desktop\KursMaterial\05-IEPYTUI\Teil 4 - Flask\Aufgaben\guest_book.db</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
+    <data-source source="LOCAL" name="flights" uuid="e0e6b1e2-31df-4cce-8b24-7a5c42c58dda">
+      <driver-ref>sqlite.xerial</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
+      <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/07-/Aufgaben/05-algo/src/flights.db</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
   </component>
 </project>
