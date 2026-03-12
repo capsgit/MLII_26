@@ -2,8 +2,8 @@
   "api": {
     "base_url": "https://aerodatabox.p.rapidapi.com/flights/airports",
     "timeout_seconds": 1200,
-    "airports": ["BOG", "BER"],
-    "airports_stop": [
+    "airports_test": ["LEJ", "BOG"],
+    "airports": [
       "BER",
       "STR",
       "CDG"

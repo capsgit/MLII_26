@@ -1,39 +1,30 @@
 import sqlite3
-from datetime import datetime
-from data_transform import FlightRecord
+from models import FlightRecord
 
 class FlightStorage:
     def __init__(self, db_path):
         self.db_path = db_path
-        self._create_table()
+        self._create_tables()
 
     def _connect(self):
-        return sqlite3.connect(self.db_path)
+        conn= sqlite3.connect(self.db_path)
+        conn.execute("PRAGMA foreign_keys = ON;") # activate foreign keys
+        return conn
 
-    def get_or_create_airline(self, airline_name: str) -> int:
+    def _create_tables(self) -> None:
         with self._connect() as conn:
             cursor = conn.cursor()
 
-            cursor.execute(
-                "SELECT id FROM airlines WHERE name = ?",
-                (airline_name,)
-            )
-            row = cursor.fetchone()
-
-            if row:
-                return row[0]
-
-            cursor.execute(
-                "INSERT INTO airlines (name) VALUES (?)",
-                (airline_name,)
-            )
-            conn.commit()
-            return cursor.lastrowid
-
-    def _create_table(self) -> None:
-        with self._connect() as conn:
-            cursor = conn.cursor()
             cursor.execute("""
+                           CREATE TABLE IF NOT EXISTS airlines
+                           (
+                               id   INTEGER PRIMARY KEY AUTOINCREMENT,
+                               name TEXT NOT NULL UNIQUE
+                           )
+                           """)
+
+            cursor.execute("""
+            
                 CREATE TABLE IF NOT EXISTS flights (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     destination_airport TEXT NOT NULL,
@@ -47,23 +38,59 @@ class FlightStorage:
                     hour INTEGER NOT NULL,
                     minute INTEGER NOT NULL,
                     second INTEGER NOT NULL,
-                    FOREIGN KEY (airline_id) REFERENCES airlines(id)
+                    
+                    UNIQUE(destination_airport, flight_number, year, month, day, hour, minute), 
+                    
+                    FOREIGN KEY (airline_id) REFERENCES airlines(id)                    
                 );
             """)
-            cursor.execute("""
-                CREATE TABLE IF NOT EXISTS airlines (
-                  id INTEGER PRIMARY KEY AUTOINCREMENT,
-                  name TEXT NOT NULL UNIQUE
-                )
-            """)
+
             conn.commit()
+
+    @staticmethod
+    def get_or_create_airline(cursor, airline_name: str) -> int:
+        cursor.execute(
+            "SELECT id FROM airlines WHERE name = ?",
+            (airline_name,)
+        )
+        row = cursor.fetchone()
+
+        if row:
+            return row[0]
+
+        cursor.execute(
+            "INSERT INTO airlines (name) VALUES (?)",
+            (airline_name,)
+        )
+        return cursor.lastrowid
 
     def add_flights(self, records: list[FlightRecord]) -> None:
         with self._connect() as conn:
             cursor = conn.cursor()
+
+            rows_to_insert = []
+            for record in records:
+                airline_id = self.get_or_create_airline(cursor, record.airline_name)
+
+                rows_to_insert.append(
+                    (
+                        record.destination_airport,
+                        record.origin_country,
+                        record.origin_iata_airport,
+                        record.flight_number,
+                        airline_id,
+                        record.year,
+                        record.month,
+                        record.day,
+                        record.hour,
+                        record.minute,
+                        record.second,
+                    )
+                )
+
             cursor.executemany("""
-                               INSERT INTO flights (origin_country,
-                                                    destination_airport,
+                               INSERT OR IGNORE INTO flights (destination_airport,
+                                                    origin_country,
                                                     origin_iata_airport,
                                                     flight_number,
                                                     airline_id,
@@ -74,20 +101,8 @@ class FlightStorage:
                                                     minute,
                                                     second)
                                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-                               """, [
-                                   (
-                                       record.origin_country,
-                                       record.destination_airport,
-                                       record.origin_iata_airport,
-                                       record.flight_number,
-                                       record.airline_name,
-                                       record.year,
-                                       record.month,
-                                       record.day,
-                                       record.hour,
-                                       record.minute,
-                                       record.second,
-                                   )
-                                   for record in records
-                               ])
+                               """, rows_to_insert)
+
             conn.commit()
+
+            return len(rows_to_insert)

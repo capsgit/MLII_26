@@ -1,25 +1,23 @@
 import json
 import os
-from dataclasses import dataclass
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta
 from pathlib import Path
 
 import requests
 from dotenv import load_dotenv
 
-from data_transform import FlightRecord
+from models import FlightRecord
 
 # Fetch + send (to Main) information about arrival flights in a determinate airport.
 #
 # Idea:
-#   - Leer config
-#   - Cargar API KEY
+#   - Read config
+#   - Load API KEY
 #   - Fetch flight data
-#   - Transformar a JSON
-#   - Devolver info (datos limpios)
+#   - Transform to a JSON
+#   - Return info (clean data)
 #
 
-@dataclass
 class FlightClient:
     """
     config + env + API-request
@@ -27,7 +25,6 @@ class FlightClient:
     def __init__(self, config_path: str) -> None:
         self.project_root = Path(__file__).parent
         self.config = self._load_config(config_path)
-       # self.logger = self._setup_logging(self.config)
 
         env_path = self.project_root / ".env"
         load_dotenv(env_path)
@@ -35,9 +32,6 @@ class FlightClient:
         self.api_key = os.getenv("API_KEY_RAPID")
         if not self.api_key:
             raise RuntimeError("Missing API_KEY_RAPID in .env")
-
-        # self.logger.info("Flight client initialized.")
-        # self.logger.info("Logger test message")
 
     def _load_config(self, config_path: str) -> dict:
         """
@@ -50,13 +44,14 @@ class FlightClient:
         with open(cfg_path, "r", encoding="utf-8") as f:
             return json.load(f)
 
-
-    def fetch_flights(self, iata_airport: str) -> list[FlightRecord]:
-
-        api_config = self.config.get("api", {}) #
-        base_url = api_config["base_url"] #
-        timeout = api_config.get("timeout_seconds", 1200) #
-
+    def fetch_flights(self, iata_airport: str) -> list[dict]:
+        """
+        Get information about arrival flights in a determinate airport from the API.
+        endpoint: https://aerodatabox.p.rapidapi.com/iata/{iata_airport}/{start}/{end}
+        """
+        api_config = self.config.get("api", {})
+        base_url = api_config["base_url"]
+        timeout = api_config.get("timeout_seconds", 1200)
         range_hours = api_config.get("range_hours", 6)
 
         now = datetime.now()
@@ -85,67 +80,34 @@ class FlightClient:
         try:
             response = requests.get(url, headers=headers, params=querystring, timeout=timeout)
             response.raise_for_status()
-            data = response.json()
+
+            if not response.text.strip():
+                print(f"Empty response body for airport {iata_airport}")
+                return []
+
+            try:
+                data = response.json()
+
+            except ValueError:
+                print(f"Non-JSON response for airport {iata_airport}")
+                print(f"Status code: {response.status_code}")
+                print(f"Response preview: {response.text[:300]}")
+                return []
+
 
         except requests.exceptions.HTTPError as e:
             status_code = e.response.status_code
 
             if status_code == 429:
-                print("Rate limit reached: too many requests to the API.")
+                print(f"Rate limit reached for airport {iata_airport}")
+
             else:
-                print(f"HTTP error: {status_code}")
-                print(f"Body: {e.response.text}")
-            raise
+                print(f"HTTP error for airport {iata_airport}: {status_code}")
+                print(f"Body: {e.response.text[:300]}")
+            return []
 
         except requests.exceptions.RequestException as e:
-            print(f"Request error: {e}")
-            raise
+            print(f"Request error for airport {iata_airport}: {e}")
+            return []
 
         return data.get("arrivals", [])
-
-
-    @staticmethod
-    def transform_flights(raw_flights: list[dict], destination_airport:str) -> list[FlightRecord]:
-        """
-        Convert raw flight data into FlightRecord objects ready for SQLite.
-        """
-        records = []
-
-        for flight in raw_flights:
-            origin_country = flight.get("departure", {}).get("airport", {}).get("countryCode")
-            origin_iata_airport = flight.get("departure", {}).get("airport", {}).get("iata")
-            destination_airport = destination_airport
-            flight_number = flight.get("number")
-            airline = flight.get("airline", {}).get("name")
-            arrival_info = flight.get("arrival", {}).get("scheduledTime", {}).get("local")
-
-            if not arrival_info:
-                continue
-
-            arrival_dt = datetime.fromisoformat(arrival_info)
-
-            year = arrival_dt.year
-            month = arrival_dt.month
-            day = arrival_dt.day
-            hour = arrival_dt.hour
-            minute = arrival_dt.minute
-            second = arrival_dt.second
-
-            record = FlightRecord(
-                origin_country=origin_country,
-                origin_iata_airport=origin_iata_airport,
-                destination_airport=destination_airport,
-                flight_number=flight_number,
-                airline_name=airline,
-                year=year,
-                month=month,
-                day=day,
-                hour=hour,
-                minute=minute,
-                second=second
-            )
-            records.append(record)
-
-        return records
-
-
