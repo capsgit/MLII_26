@@ -19,7 +19,7 @@
   },
   "logging": {
     "level": "INFO",
-    "file": "logs/airport_fligths.log",
+    "file": "logs/airport_flights.log",
     "format": "%(asctime)s | %(levelname)s | %(name)s | %(message)s"
   }
 }

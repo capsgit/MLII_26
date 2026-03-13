@@ -65,17 +65,22 @@ Each module has a single responsibility, making the system easier to maintain an
 # 📁 Project Structure
 
 ```
-src
+ETL_Airports
 │
-├── app.py
-├── config.json
-├── fetch_service.py
-├── flight_row_transformer.py
-├── db_storage.py
-├── models.py
-├── logging_config.py
-├── flights.db
-└── .env
+├─ src
+│   ├─ app.py
+│   ├─ fetch_service.py
+│   ├─ flight_row_transformer.py
+│   ├─ db_storage.py
+│   ├─ models.py
+│   └─ logging_config.py
+│
+├─ logs
+│   └─ pipeline.log
+│
+├─ flights.db
+├─ config.json
+└─ README.md
 ```
 
 ---
@@ -244,6 +249,3 @@ python-dotenv
 
 capsgit
 
-```
-
-```

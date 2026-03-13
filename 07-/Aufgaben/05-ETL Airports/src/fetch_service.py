@@ -1,4 +1,5 @@
 import json
+import logging
 import os
 from datetime import datetime, timedelta
 from pathlib import Path
@@ -18,13 +19,15 @@ from models import FlightRecord
 #   - Return info (clean data)
 #
 
+logger = logging.getLogger("flight")
+
 class FlightClient:
     """
     config + env + API-request
     """
-    def __init__(self, config_path: str) -> None:
-        self.project_root = Path(__file__).parent
-        self.config = self._load_config(config_path)
+    def __init__(self, config: dict) -> None:
+        self.project_root = Path(__file__).resolve().parents[1]
+        self.config = config
 
         env_path = self.project_root / ".env"
         load_dotenv(env_path)
@@ -32,6 +35,9 @@ class FlightClient:
         self.api_key = os.getenv("API_KEY_RAPID")
         if not self.api_key:
             raise RuntimeError("Missing API_KEY_RAPID in .env")
+
+        logger.info("Flight client initialized.")
+        logger.info("Logger test message")
 
     def _load_config(self, config_path: str) -> dict:
         """
@@ -77,21 +83,23 @@ class FlightClient:
             "x-rapidapi-host": "aerodatabox.p.rapidapi.com"
         }
 
+        logger.info("Fetching flight for airport=%s start=%s end=%s", iata_airport, start, end)
+
         try:
             response = requests.get(url, headers=headers, params=querystring, timeout=timeout)
             response.raise_for_status()
 
             if not response.text.strip():
-                print(f"Empty response body for airport {iata_airport}")
+                logger.error(f"Empty response body for airport {iata_airport}")
                 return []
 
             try:
                 data = response.json()
 
             except ValueError:
-                print(f"Non-JSON response for airport {iata_airport}")
-                print(f"Status code: {response.status_code}")
-                print(f"Response preview: {response.text[:300]}")
+                logger.error(f"Non-JSON response for airport {iata_airport}")
+                logger.error(f"Status code: {response.status_code}")
+                logger.error(f"Response preview: {response.text[:300]}")
                 return []
 
 
@@ -99,15 +107,15 @@ class FlightClient:
             status_code = e.response.status_code
 
             if status_code == 429:
-                print(f"Rate limit reached for airport {iata_airport}")
+                logger.error(f"Rate limit reached for airport {iata_airport}")
 
             else:
-                print(f"HTTP error for airport {iata_airport}: {status_code}")
-                print(f"Body: {e.response.text[:300]}")
+                logger.error(f"HTTP error for airport {iata_airport}: {status_code}")
+                logger.error(f"Body: {e.response.text[:300]}")
             return []
 
         except requests.exceptions.RequestException as e:
-            print(f"Request error for airport {iata_airport}: {e}")
+            logger.error(f"Request error for airport {iata_airport}: {e}")
             return []
 
         return data.get("arrivals", [])

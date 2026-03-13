@@ -4,25 +4,35 @@ __author__ = "capsgit"
 __doc__ = """
 The application is designed to fetch and show the traffic-data for multiple airports. 
 """
+import json
+from pathlib import Path
 import time
 from pprint import pprint
 
 from fetch_service import FlightClient
 from db_storage import FlightStorage
 from flight_row_transformer import transform_flights
+from logging_config import setup_logging
+
+def load_config(config_path: str) -> dict:
+    base_dir = Path(__file__).resolve().parents[1]
+    cfg_path = base_dir / config_path
+
+    with open(cfg_path, "r", encoding="utf-8") as f:
+        return json.load(f)
 
 def main() -> None:
-    client = FlightClient("config.json")
-    storage = FlightStorage("flights.db")
+    config = load_config("config.json")
+    setup_logging(config)
 
+    client = FlightClient(config)
+    storage = FlightStorage("flights.db")
     airports = client.config["api"]["airports"]
 
     for airport in airports:
         try:
             raw_flights = client.fetch_flights(airport)
-
             records, report = transform_flights(raw_flights, airport)
-
             inserted = storage.add_flights(records)
 
             print(f"\n--- {airport} ---")

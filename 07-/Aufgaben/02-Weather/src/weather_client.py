@@ -82,7 +82,7 @@ class Weather:
     def fetch_weather(self, city_name: str, lang: str) -> tuple[float, str, str, str]:
         """
         Search weather in X cty and return ->
-        temperature, descripción, sunrise, sunset
+        temperature, descriptión, sunrise, sunset
         """
 
         api_cfg = self.config.get("api", {})
