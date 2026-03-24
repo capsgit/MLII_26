@@ -1,0 +1,427 @@
+{
+  "meta": {
+    "project_name": "Fashion",
+    "checker_version": "1.0",
+    "dataset_name": "Fashion MNIST dataset",
+    "created_at": "24.03.26",
+    "last_updated": "24.03.26",
+    "status": "draft"
+  },
+  "section_0_problem_definition": {
+    "task_type": "classification",
+    "task_type_options": ["classification", "regression", "unsupervised"],
+    "objective_is_clear": true,
+    "target_variable_identified": true,
+    "error_cost_understood": true,
+    "problem_notes": "Clasificar imágenes de prendas de vestir en una de varias clases discretas.",
+    "target_variable": "fashion_category",
+    "error_cost_level": "medium",
+    "error_cost_level_options": ["low", "medium", "high"],
+    "error_cost_notes": "El problema no es de alto riesgo, pero confundir clases visualmente parecidas sigue siendo relevante para evaluar el modelo.",
+    "primary_metric": "accuracy",
+    "secondary_metrics": ["f1", "confusion_matrix"],
+    "primary_metric_is_coherent": true,
+    "metric_matches_real_error_cost": true,
+    "metric_notes": "Accuracy es adecuada como métrica principal para clasificación multiclase en un dataset aproximadamente balanceado. F1 y matriz de confusión complementan el análisis."
+  },
+  "section_1_data_analysis": {
+    "data_type": "image",
+    "data_type_options": ["tabular", "image", "text", "time_series", "other"],
+    "data_type_other": "",
+    "n_samples_total": 70000,
+    "n_samples_train": 60000,
+    "n_samples_validation": null,
+    "n_samples_test": 10000,
+    "n_features": 784,
+    "n_classes": 10,
+    "samples_vs_variables_understood": true,
+    "data_shape_notes": "Imágenes de 28x28 píxeles en escala de grises. Cada imagen puede representarse como 784 features si se aplana.",
+    "missing_data_detected": false,
+    "duplicates_checked": true,
+    "apparent_noise_identified": false,
+    "corrupted_or_anomalous_examples_checked": true,
+    "data_quality_notes": "Dataset limpio, sin valores faltantes y con bajo nivel de ruido.",
+    "class_balance_status": "balanced",
+    "class_balance_status_options": ["balanced", "imbalanced", "unknown", "not_applicable"],
+    "target_distribution_reviewed": true,
+    "relevant_structure_reviewed": true,
+    "relevant_structure_flags": {
+      "spatial_structure": true,
+      "temporal_structure": false,
+      "local_patterns": true,
+      "global_patterns": true
+    },
+    "distribution_notes": "Las clases están aproximadamente balanceadas. Existe estructura espacial relevante en las imágenes (vecindad de píxeles).",
+    "simple_baseline_defined": true,
+    "baseline_matches_problem_type": true,
+    "baseline_is_useful_reference": true,
+    "baseline_name": "softmax_logistic_regression",
+    "baseline_notes": "Un clasificador lineal sobre las imágenes aplanadas sirve como baseline mínimo para comparar modelos más complejos.",
+    "observed_complexity_signals": [
+      "non_linear_patterns",
+      "spatial_structure",
+      "class_overlap_between_similar_items"
+    ]
+  },
+  "section_2_preprocessing": {
+    "scaling_needed": true,
+    "scaling_not_needed": false,
+    "scaling_decision_justified": true,
+    "scaling_method": "normalize_0_1",
+    "scaling_method_options": [
+      "standard_scaler",
+      "minmax_scaler",
+      "normalize_0_1",
+      "channel_standardization",
+      "other",
+      "not_applicable"
+    ],
+    "scaling_method_other": "",
+    "scaling_reason": ["gradient_based_model", "numerical_stability"],
+    "scaling_reason_options": [
+      "distance_based_model",
+      "margin_based_model",
+      "gradient_based_model",
+      "pca",
+      "numerical_stability",
+      "other"
+    ],
+    "scaling_reason_other": "",
+    "nominal_categorical_exists": false,
+    "ordinal_categorical_exists": false,
+    "correct_encoding_defined": true,
+    "high_cardinality_checked": false,
+    "categorical_not_applicable": true,
+    "encoding_method": "one_hot",
+    "categorical_notes": "El target es una variable categórica multiclase codificada como one-hot.",
+    "missing_values_strategy": "not_applicable",
+    "missing_values_strategy_options": [
+      "drop",
+      "mean_imputation",
+      "median_imputation",
+      "mode_imputation",
+      "other",
+      "not_applicable"
+    ],
+    "missing_values_strategy_other": "",
+    "outliers_identified": false,
+    "outliers_removed": false,
+    "outliers_transformed": false,
+    "outliers_kept_with_justification": false,
+    "outliers_not_central_problem": true,
+    "dimensionality_reduction": "none",
+    "dimensionality_reduction_options": ["none", "pca", "other"],
+    "dimensionality_reduction_other": "",
+    "structure_transformation": {
+      "image_normalization": true,
+      "image_flatten": false,
+      "keep_spatial_shape": true,
+      "text_vectorization": false,
+      "series_windows_or_lags": false,
+      "other": ""
+    },
+    "leakage_control_train_only_fit": true,
+    "leakage_control_val_test_from_train_params": true,
+    "preprocessing_notes": "Las imágenes se normalizan a [0,1] sin perder su estructura espacial. Se evita el flatten para permitir el uso de CNN.",
+    "preprocessing_risks_detected": [
+      "flatten_would_destroy_spatial_structure"
+    ]
+  },
+  "section_3_model_family": {
+    "apparent_relationship_type": [
+      "complex_nonlinear",
+      "spatial_structure",
+      "local_neighborhood_structure"
+    ],
+    "apparent_relationship_type_options": [
+      "linear_or_almost_linear",
+      "nonlinear_rule_based",
+      "complex_nonlinear",
+      "high_dimension_few_samples",
+      "local_neighborhood_structure",
+      "spatial_structure",
+      "temporal_structure"
+    ],
+    "candidate_families_considered": ["cnn", "mlp"],
+    "candidate_families_options": [
+      "linear_models",
+      "trees",
+      "random_forest",
+      "boosting",
+      "svm",
+      "knn",
+      "mlp",
+      "cnn",
+      "rnn_lstm_gru",
+      "other"
+    ],
+    "candidate_families_other": "",
+    "chosen_family_initial": "cnn",
+    "family_connected_to_data_structure": true,
+    "family_connected_to_observed_complexity": true,
+    "family_connected_to_problem_objective": true,
+    "flatten_is_justified_if_used": false,
+    "cnn_considered_if_spatial_structure_matters": true,
+    "family_notes": "El problema consiste en clasificar imágenes con estructura espacial. Las CNN son especialmente adecuadas porque capturan patrones locales como bordes y texturas, mientras que las MLP ignoran la relación espacial entre píxeles.",
+    "main_reason_for_family_choice": "La presencia de estructura espacial en los datos hace que las CNN sean más adecuadas que las MLP para capturar patrones relevantes.",
+    "signal_that_would_trigger_family_change": "Si una CNN pequeña no supera significativamente a un baseline simple o si el modelo muestra sobreajuste extremo sin mejora en generalización."
+  },
+  "section_4_baseline_and_comparison": {
+  "baseline_defined": true,
+  "baseline_is_reasonable": true,
+  "baseline_serves_as_reference": true,
+  "baseline_model_name": "softmax_logistic_regression",
+  "alternative_model_defined": true,
+  "alternative_same_family": false,
+  "alternative_different_family": true,
+  "change_has_justification": true,
+  "alternative_model_name": "cnn_small",
+  "too_many_variables_changed_at_once": false,
+  "comparison_is_interpretable": true,
+  "change_responds_to_hypothesis": true,
+  "comparison_hypothesis": "Una CNN pequeña superará al baseline lineal porque puede capturar patrones espaciales que un modelo lineal no puede representar.",
+  "expected_improvement": "Mayor accuracy en test y mejor diferenciación entre clases visualmente similares.",
+  "signal_that_invalidates_change": "Si la CNN no mejora significativamente la accuracy respecto al baseline o presenta sobreajuste sin mejora en generalización.",
+  "comparison_notes": "Se compara un modelo lineal simple contra una CNN pequeña para evaluar el impacto de modelar la estructura espacial del dato."
+  },
+  "section_5_model_architecture": {
+    "number_of_layers_defined": true,
+    "neurons_or_filters_defined": true,
+    "capacity_interpreted": true,
+    "hidden_layers": [
+      128
+    ],
+    "filters_per_conv_layer": [
+      32,
+      32,
+      64,
+      64,
+      128,
+      128
+    ],
+    "activation_functions": [
+      "relu",
+      "softmax"
+    ],
+    "activation_function_options": [
+      "relu",
+      "tanh",
+      "sigmoid",
+      "softmax",
+      "leaky_relu",
+      "other"
+    ],
+    "activation_function_other": "",
+    "capacity_not_insufficient": true,
+    "capacity_not_excessive": true,
+    "activation_has_reason": true,
+    "architecture_respects_data_structure": true,
+    "architecture_summary": "CNN con dos bloques convolucionales (32,32) y (64,64), BatchNormalization, MaxPooling, Flatten, Dense(128), Dropout(0.3) y salida Softmax(10).",
+    "main_activation": "relu",
+    "expected_main_risk": "overfitting",
+    "expected_main_risk_options": [
+      "underfitting",
+      "overfitting",
+      "instability",
+      "unknown"
+    ],
+    "architecture_notes": "La arquitectura aumentó capacidad de forma controlada respecto a la CNN inicial y mejoró separación entre clases similares."
+  },
+  "section_6_training_configuration": {
+    "optimizer": "adam",
+    "optimizer_options": [
+      "adam",
+      "sgd",
+      "rmsprop",
+      "adagrad",
+      "other"
+    ],
+    "optimizer_other": "",
+    "learning_rate": 0.001,
+    "learning_rate_defined": true,
+    "learning_rate_justified": true,
+    "learning_rate_effect_observed": true,
+    "batch_size": 128,
+    "batch_size_defined": true,
+    "batch_size_coherent_with_hardware_and_goal": true,
+    "batch_size_effect_understood": true,
+    "epochs_initial": 15,
+    "epochs_not_arbitrary": true,
+    "epochs_observed_with_train_validation": true,
+    "stop_or_continue_criterion_exists": true,
+    "regularization_methods": [
+      "dropout",
+      "batch_normalization",
+      "data_augmentation"
+    ],
+    "regularization_methods_options": [
+      "none",
+      "l2",
+      "dropout",
+      "early_stopping",
+      "data_augmentation",
+      "batch_normalization",
+      "other"
+    ],
+    "regularization_methods_other": "",
+    "data_split": {
+      "train": true,
+      "validation": true,
+      "test": true,
+      "cross_validation": false
+    },
+    "training_aligned_with_architecture": true,
+    "training_aligned_with_expected_risk": true,
+    "training_allows_overfit_underfit_diagnosis": true,
+    "training_notes": "Se entrenó con Adam (lr=0.001), batch size 128, validation_split y posteriormente se añadieron Dropout, BatchNorm y augmentation para mejorar generalización.",
+    "first_symptom_observed": "Al inicio hubo colapso por inconsistencia en preprocesamiento; corregido el pipeline, el entrenamiento se volvió estable.",
+    "most_likely_adjustment_if_fails": "Ajustar learning rate, regularización o número de epochs antes de volver a escalar la arquitectura."
+  },
+  "section_7_evaluation": {
+    "metrics_used": [
+      "accuracy",
+      "f1"
+    ],
+    "metrics_used_options": [
+      "accuracy",
+      "precision",
+      "recall",
+      "f1",
+      "mae",
+      "mse",
+      "rmse",
+      "other"
+    ],
+    "metrics_used_other": "",
+    "curves_checked": {
+      "train_loss": true,
+      "validation_loss": true,
+      "train_accuracy": true,
+      "validation_accuracy": true
+    },
+    "specific_errors_checked": {
+      "confusion_matrix": true,
+      "problematic_classes": true,
+      "residuals_for_regression": false,
+      "misclassified_examples": true
+    },
+    "preliminary_reading": {
+      "train_bad_val_bad": false,
+      "train_good_val_bad": false,
+      "unstable_training": false,
+      "reasonable_and_stable_improvement": true
+    },
+    "main_metric_observed_value": null,
+    "secondary_metric_values": {},
+    "curve_pattern_description": "El entrenamiento dejó de colapsar y produjo una matriz de confusión con diagonal clara. Las clases fáciles quedaron muy bien resueltas y las más difíciles conservan confusiones estructurales.",
+    "dominant_error_type": "class_overlap_between_similar_items",
+    "evaluation_notes": "Los errores se concentran en clases visualmente parecidas: 0↔6 y 2↔4↔6. Clases como 1, 5, 7, 8 y 9 se clasifican muy bien."
+  },
+  "section_8_interpretation": {
+    "main_diagnosis": "reasonable_result",
+    "main_diagnosis_options": [
+      "underfitting",
+      "overfitting",
+      "instability",
+      "marginal_gain_vs_baseline",
+      "reasonable_result"
+    ],
+    "suggested_action": [
+      "keep_current_model"
+    ],
+    "suggested_action_options": [
+      "more_capacity",
+      "less_capacity",
+      "more_regularization",
+      "less_regularization",
+      "adjust_learning_rate",
+      "change_family",
+      "keep_current_model"
+    ],
+    "action_supported_by_metrics": true,
+    "action_supported_by_curves": true,
+    "action_supported_by_specific_errors": true,
+    "interpretation_summary": "El modelo actual ya es razonable y estable. El error dominante no parece deberse a una mala familia de modelo sino a la similitud visual entre ciertas clases.",
+    "chosen_action": "keep_current_model",
+    "reason_for_action": "La CNN ya generaliza de forma razonable; las mejoras futuras serán marginales y deberán enfocarse en refinar regularización o augmentación, no en cambiar de familia."
+  },
+  "section_9_generalization": {
+    "test_set_exists": true,
+    "cross_validation_exists_if_needed": false,
+    "not_concluding_from_train_only": true,
+    "out_of_sample_result_acceptable": true,
+    "test_result_summary": "La matriz de confusión final muestra generalización razonable y errores comprensibles por similitud visual.",
+    "train_validation_test_difference": "No se observan señales de colapso ni de sobreajuste extremo en la versión final del pipeline.",
+    "risk_of_overfitting_to_validation": false,
+    "generalization_notes": "El pipeline final es consistente entre train, validation y test; el modelo parece generalizar adecuadamente para una CNN compacta."
+  },
+  "section_10_limitations": {
+    "limited_dataset_size": false,
+    "possible_sampling_bias": false,
+    "high_noise": false,
+    "relevant_missing_variables": false,
+    "fragile_split": false,
+    "weak_statistical_support": true,
+    "other_limitation": "No se dejó registrada una comparación numérica final completa contra baseline lineal y MLP bajo el mismo protocolo.",
+    "main_limitation": "Persisten confusiones estructurales entre clases visualmente parecidas.",
+    "effect_on_conclusion": "La conclusión sobre la familia CNN sigue siendo sólida, pero la magnitud exacta de la mejora frente a otras alternativas simples podría documentarse mejor.",
+    "limitations_notes": "Sería útil guardar accuracy/F1 exactos de cada experimento y repetir con varias seeds."
+  },
+  "section_11_common_errors_control": {
+    "avoided_single_metric_only": true,
+    "avoided_comparing_with_different_splits": true,
+    "avoided_changing_too_many_things_at_once": false,
+    "avoided_ignoring_baseline": true,
+    "specific_errors_checked": true,
+    "metric_aligned_with_error_cost": true,
+    "avoided_confusing_real_improvement_with_unjustified_complexity": true,
+    "control_notes": "Durante el proceso hubo problemas por mezclar pipelines y preprocesamientos; en la versión final esos errores quedaron identificados y corregidos."
+  },
+  "section_12_iteration": {
+    "if_underfitting": {
+      "increase_capacity": false,
+      "train_more": false,
+      "improve_features": true,
+      "change_family_if_needed": false
+    },
+    "if_overfitting": {
+      "regularize": true,
+      "simplify": false,
+      "use_early_stopping": true,
+      "get_more_data": false
+    },
+    "if_instability": {
+      "lower_learning_rate": true,
+      "review_scaling_or_normalization": true,
+      "review_batch_size": false,
+      "review_architecture": false
+    },
+    "if_baseline_is_enough": {
+      "stop_escalating_complexity": true,
+      "document_why_simple_model_is_enough": false
+    },
+    "what_stays": "Familia CNN, preservación de estructura espacial, normalización [0,1], salida softmax.",
+    "what_changes": "Se puede afinar learning rate, epochs y augmentation, o medir con mayor rigor el efecto incremental de cada mejora.",
+    "next_round_hypothesis": "Pequeños refinamientos de regularización y augmentación pueden reducir confusiones 0↔6 y 2↔4↔6 sin necesidad de cambiar de familia.",
+    "iteration_notes": "El siguiente paso no debería ser cambiar de familia, sino refinar y medir mejor el margen de mejora de la CNN actual."
+  },
+
+  "final_recommendation_placeholder": {
+    "recommended_family": "cnn",
+    "recommended_baseline": "softmax_logistic_regression",
+    "recommended_starting_model": "cnn_2_blocks_bn_dropout_aug",
+    "why_this_model": [
+      "El dato es imagen y tiene estructura espacial relevante.",
+      "La CNN final ya mostró una matriz de confusión sana y aprendizaje estable.",
+      "Las mejoras recientes redujeron errores sin cambiar de familia.",
+      "El error restante es principalmente por similitud visual entre clases, no por desajuste total del modelo."
+    ],
+    "what_not_to_start_with": [
+      "MLP con flatten como modelo principal",
+      "Pipelines que mezclen train y test con escalas distintas",
+      "Cambiar muchas variables a la vez sin baseline"
+    ],
+    "first_adjustment_if_it_fails": "Revisar consistencia del preprocesamiento, luego ajustar learning rate y regularización antes de escalar más la arquitectura.",
+    "signal_to_change_family": "Solo cambiar de familia si una CNN bien entrenada deja de mejorar frente al baseline y el costo extra no se traduce en mejor generalización."
+  }
+}

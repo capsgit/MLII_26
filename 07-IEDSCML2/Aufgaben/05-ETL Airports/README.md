@@ -189,7 +189,7 @@ Example configuration:
     "base_url": "https://aerodatabox.p.rapidapi.com/flights/airports",
     "timeout_seconds": 1200,
     "range_hours": 6,
-    "airports": ["BOG", "LEJ", "CPH"]
+    "airports": ["BER", "LEJ", "CPH"]
   }
 }
 ```
