@@ -29,9 +29,10 @@ La numeración sigue esta lógica:
 # 🎯 0. Definición del problema
 
 ## 0.1 Tipo de tarea
-- [ ] Clasificación
-- [ ] Regresión
-- [ ] No supervisado
+- [ ] Clasificación (class)
+- [ ] Regresión (class)
+- [ ] No supervisado -no label/target- (cluster)
+- [ ] Reinforcement
 
 ## 0.2 Objetivo concreto
 - [ ] Está claro qué se quiere predecir o descubrir
